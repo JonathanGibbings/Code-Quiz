@@ -15,6 +15,7 @@ body {
     font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
+/* start header styles */
 header {
     padding: 20px 50px;
     display: flex;
@@ -27,29 +28,27 @@ header {
     color: var(--color2);
     font-size: 20px;
 }
+/* end header styles */
 
+/* start intro styles */
 #intro-box {
     padding: 80px;
     text-align: center;
 }
 
-.quiz-box {
-    padding: 80px;
-    text-align: left;
-}
-
-main h1 {
+main #intro-box h1 {
     font-size: 48px;
     margin: 10px auto;
-    max-width: 800px;
 }
 
-main p {
+main #intro-box p {
     font-size: 18px;
     margin: 10px auto;
     max-width: 400px;
 }
+/* end intro styles */
 
+/* start button styles */
 .btn {
     background: var(--color1);
     color: white;
@@ -64,3 +63,23 @@ main p {
     background: var(--color2);
     border: var(--color4);
 }
+/* end button styles */
+
+/* start dynamic quiz styles */
+.quiz-box {
+    padding: 80px 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.quiz-box h1 {
+    margin: 20px;
+}
+
+/* .quiz-box .btn {
+    margin: 5px 50% 5px 20px;
+    width: auto;
+} */
+
+/* end dynamic quiz styles */

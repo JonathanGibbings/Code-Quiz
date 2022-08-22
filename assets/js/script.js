@@ -1,22 +1,25 @@
 // time limit for quiz
 var countLength = 75;
+var questionCounter = 0;
 var startBtnEl = document.querySelector("#start-btn");
 var quizAreaEl = document.querySelector("#quiz-area");
-var questions = [
+var questionsList = [
     {
         question: "Question 1 is 4?",
-        1: "answer 1",
-        2: "answer 2",
-        3: "answer 3",
-        4: "answer 4",
+        ans1: "answer 1 ahsdfvoaiuyfd",
+        ans2: "answer 2",
+        ans3: "answer 3",
+        ans4: "answer 4",
+        numAns: 4,
         answer: 4
     },
     {
         question: "Question 2 is 3?",
-        1: "answer 1",
-        2: "answer 2",
-        3: "answer 3",
-        4: "answer 4",
+        ans1: "answer 1",
+        ans2: "answer 2",
+        ans3: "answer 3",
+        ans4: "answer 4",
+        numAns: 4,
         answer: 3
     }
 ]
@@ -48,6 +51,20 @@ var randomizeQuestions = function() {}
 
 // puts the next question on the screen
 var nextQuestion = function() {
+    var quizEl = document.createElement("section");
+    quizEl.className = "quiz-box";
+    quizAreaEl.appendChild(quizEl);
+
+    var questionEl = document.createElement("h1");
+    questionEl.innerText = questionsList[questionCounter].question;
+    quizEl.appendChild(questionEl);
+
+    for (var i=1; i <= questionsList[questionCounter].numAns; i++) {
+        eval("var ansBtn" + i + " = document.createElement('button');");
+        eval("ansBtn" + i + ".className = 'btn';");
+        eval("ansBtn" + i + ".innerText = questionsList[questionCounter].ans" + i + ";");
+        eval("quizEl.appendChild(ansBtn" + i + ");");
+    }
 
 }
 
