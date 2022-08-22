@@ -59,11 +59,15 @@ var nextQuestion = function() {
     questionEl.innerText = questionsList[questionCounter].question;
     quizEl.appendChild(questionEl);
 
+    var ansBoxEl = document.createElement("div");
+    ansBoxEl.className = "ans-box";
+    quizEl.appendChild(ansBoxEl);
+    
     for (var i=1; i <= questionsList[questionCounter].numAns; i++) {
         eval("var ansBtn" + i + " = document.createElement('button');");
         eval("ansBtn" + i + ".className = 'btn';");
         eval("ansBtn" + i + ".innerText = questionsList[questionCounter].ans" + i + ";");
-        eval("quizEl.appendChild(ansBtn" + i + ");");
+        eval("ansBoxEl.appendChild(ansBtn" + i + ");");
     }
 
 }

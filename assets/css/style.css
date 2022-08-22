@@ -77,9 +77,15 @@ main #intro-box p {
     margin: 20px;
 }
 
-/* .quiz-box .btn {
-    margin: 5px 50% 5px 20px;
-    width: auto;
-} */
+.ans-box {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.ans-box .btn {
+    margin: 5px 5px 5px 20px;
+    text-align: left;
+}
 
 /* end dynamic quiz styles */
