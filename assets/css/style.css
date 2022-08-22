@@ -28,17 +28,23 @@ header {
     font-size: 20px;
 }
 
-.quiz-box {
+#intro-box {
     padding: 80px;
     text-align: center;
 }
 
-.quiz-box h1 {
-    font-size: 48px;
-    margin: 10px;
+.quiz-box {
+    padding: 80px;
+    text-align: left;
 }
 
-.quiz-box p {
+main h1 {
+    font-size: 48px;
+    margin: 10px auto;
+    max-width: 800px;
+}
+
+main p {
     font-size: 18px;
     margin: 10px auto;
     max-width: 400px;
