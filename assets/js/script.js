@@ -1,7 +1,7 @@
 // time limit for quiz
-var countLength = 75;
+var countLength = 5;
 var questionCounter = 0;
-var startBtnEl = document.querySelector("#start-btn");
+var startBtnEl = document.querySelector(".start-btn");
 var quizAreaEl = document.querySelector("#quiz-area");
 var questionsList = [
     {
@@ -11,7 +11,7 @@ var questionsList = [
         ans3: "answer 3",
         ans4: "answer 4",
         numAns: 4,
-        answer: 4
+        answer: "ans4"
     },
     {
         question: "Question 2 is 3?",
@@ -20,7 +20,7 @@ var questionsList = [
         ans3: "answer 3",
         ans4: "answer 4",
         numAns: 4,
-        answer: 3
+        answer: "ans3"
     }
 ]
 
@@ -28,13 +28,15 @@ var questionsList = [
 var countdown = function() {
     var timerEl = document.querySelector("#timer");
     timerEl.innerHTML = "Time: " + countLength;
-    setInterval(function(){
+    var interval = setInterval(decrement, 1000);
+    function decrement() {
         timerEl.innerHTML = "Time: " + countLength;
         if (countLength < 1) {
+            clearInterval(interval);
             endQuiz(countLength);
         }
         countLength--;
-    }, 1000)
+    }
 }
 
 // Starts quiz by starting countdown, shuffling questions, and pulling first question
@@ -51,29 +53,74 @@ var randomizeQuestions = function() {}
 
 // puts the next question on the screen
 var nextQuestion = function() {
-    var quizEl = document.createElement("section");
-    quizEl.className = "quiz-box";
-    quizAreaEl.appendChild(quizEl);
+    if (questionCounter < questionsList.length - 1 ) {
+        var quizEl = document.createElement("section");
+        quizEl.className = "quiz-box";
+        quizAreaEl.appendChild(quizEl);
 
-    var questionEl = document.createElement("h1");
-    questionEl.innerText = questionsList[questionCounter].question;
-    quizEl.appendChild(questionEl);
+        var questionEl = document.createElement("h1");
+        questionEl.innerText = questionsList[questionCounter].question;
+        quizEl.appendChild(questionEl);
 
-    var ansBoxEl = document.createElement("div");
-    ansBoxEl.className = "ans-box";
-    quizEl.appendChild(ansBoxEl);
-    
-    for (var i=1; i <= questionsList[questionCounter].numAns; i++) {
-        eval("var ansBtn" + i + " = document.createElement('button');");
-        eval("ansBtn" + i + ".className = 'btn';");
-        eval("ansBtn" + i + ".innerText = questionsList[questionCounter].ans" + i + ";");
-        eval("ansBoxEl.appendChild(ansBtn" + i + ");");
+        var ansBoxEl = document.createElement("div");
+        ansBoxEl.className = "ans-box";
+        quizEl.appendChild(ansBoxEl);
+
+        for (var i=1; i <= questionsList[questionCounter].numAns; i++) {
+            eval("var ansBtn" + i + " = document.createElement('button');");
+            eval("ansBtn" + i + ".className = 'btn ans-btn';");
+            eval("ansBtn" + i + ".id = 'ans" + i + "';");
+            eval("ansBtn" + i + ".innerText = questionsList[questionCounter].ans" + i + ";");
+            eval("ansBoxEl.appendChild(ansBtn" + i + ");");
+        }
+    } else {
+        endQuiz(countLength);
     }
-
+}
+// removes current question
+var removeQuestion = function() {
+    var quizEl = document.querySelector(".quiz-box");
+    quizEl.remove();
+    questionCounter++;
 }
 
 // brings up the highscore screen
-var endQuiz = function(score) {}
+var endQuiz = function(score) {
+    console.log("IT'S OVER!");
+}
+
+// checks if answer is correct
+var ansCheck = function(event) {
+    // gets what answer was clicked
+    var targetEl = event.target;
+    // checks if target was an answer button
+    if (targetEl.matches(".ans-btn")) {
+        // finds correct answer from object
+        var correct = questionsList[questionCounter].answer
+        // removes current question and increments question count
+        removeQuestion();
+        // brings next question up
+        nextQuestion();
+        // creates elements to show evaluation of answer
+        var ansBoxEl = document.querySelector(".ans-box");
+        var hRuleEl = document.createElement("hr");
+        hRuleEl.className = "ruler";
+        ansBoxEl.appendChild(hRuleEl);
+        var evalEl = document.createElement("h2");
+        evalEl.className = "evaluation";
+        // checks if answers match and shows evaluation
+        if (targetEl.id === correct) {
+            evalEl.innerText = "Correct";
+            ansBoxEl.appendChild(evalEl);
+            console.log("correct");
+        } else {
+            console.log("Wrong");
+            evalEl.innerText = "Wrong";
+            ansBoxEl.appendChild(evalEl);
+        }
+    }
+}
 
 // event listeners for buttons
 startBtnEl.addEventListener("click", startQuiz);
+quizAreaEl.addEventListener("click", ansCheck);
