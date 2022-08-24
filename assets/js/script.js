@@ -250,6 +250,10 @@ var eventHandler = function(event) {
         scores.push(userScore);
         saveScore();
         showScores();
+    } else if (targetEl.matches(".back-btn")) {
+        location.reload();
+    } else if (targetEl.matches(".delete-btn")) {
+        deleteScores();
     }
 }
 
@@ -270,9 +274,17 @@ var showScores = function() {
     for (var i = 0; i , i < scores.length; i++) {
         var scoreItemEl = document.createElement("li");
         scoreItemEl.innerText = (i+1) + ". " + scores[i].user + " - " + scores[i].score;
-        scoreBoxEl.appendChild(scoreItemEl);
+        scoreListEl.appendChild(scoreItemEl);
     }
-
+    // add buttons for return and delete
+    var goBackBtn = document.createElement("button");
+    goBackBtn.className = "btn back-btn";
+    goBackBtn.innerText = "Go Back";
+    scoreBoxEl.appendChild(goBackBtn);
+    var deleteBtn = document.createElement("button");
+    deleteBtn.className = "btn delete-btn";
+    deleteBtn.innerText = "Clear high scores";
+    scoreBoxEl.appendChild(deleteBtn);
 }
 
 // sets the screen to the home start screen for the quiz
@@ -321,5 +333,5 @@ var deleteScores = function() {
 introScreen();
 loadScores();
 // event listeners for buttons
-quizAreaEl.addEventListener("click", eventHandler);
+bodyEl.addEventListener("click", eventHandler);
 headerEl.addEventListener("click", showScores);

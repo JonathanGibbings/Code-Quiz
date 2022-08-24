@@ -139,4 +139,25 @@ main #intro-box p {
 /* end results styles*/
 
 /* start rankings styles */
+#score-box {
+    padding: 80px;
+    text-align: center;
+}
+
+#score-box h1 {
+    font-size: 48px;
+    margin: 10px auto;
+}
+
+#score-box ul {
+    text-align: left;
+    list-style: none;
+}
+
+#score-box ul li {
+    margin: 5px;
+    padding: 5px;
+    font-size: 18px;
+    background: #999;
+}
 /* end ranking styles */
