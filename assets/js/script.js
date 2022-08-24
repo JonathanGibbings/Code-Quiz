@@ -1,8 +1,6 @@
 // time limit for quiz
 var countLength = 15;
-var startBtnEl = document.querySelector(".start-btn");
-var quizAreaEl = document.querySelector("#quiz-area");
-// index tracker for question array
+// index tracker for questionList array
 var questionCounter = 0;
 var questionsList = [
     {
@@ -89,6 +87,9 @@ var questionsList = [
         answer: "ans2"
     }
 ]
+// elements for event listeners
+var startBtnEl = document.querySelector(".start-btn");
+var quizAreaEl = document.querySelector("#quiz-area");
 
 // Runs countdown till end of quizLength set at top
 var countdown = function() {
@@ -103,9 +104,8 @@ var countdown = function() {
             // resets time to 0 if negative
             countLength = 0;
             timerEl.innerHTML = "Time: " + countLength;
-            
-            removeQuestion();
 
+            removeQuestion();
             endQuiz(countLength);
         }
         if (questionCounter >= questionsList.length) {
@@ -123,6 +123,40 @@ var startQuiz = function() {
     countdown();
     randomizeQuestions(questionsList);
     nextQuestion();
+}
+
+// brings up the highscore screen
+var endQuiz = function(score) {
+    // creates a box for the other elements
+    var resultsBoxEl = document.createElement("section");
+    resultsBoxEl.className = "results-box";
+    quizAreaEl.appendChild(resultsBoxEl);
+    // shows the results
+    var doneEl = document.createElement("h1");
+    doneEl.innerText = "All done!";
+    resultsBoxEl.appendChild(doneEl);
+    var resultsEl = document.createElement("p");
+    resultsEl.innerText = "Your final score is " + score + ".";
+    resultsBoxEl.appendChild(resultsEl);
+    // form for saving scores
+    var formEl = document.createElement("form");
+    formEl.className = ("form-box");
+    resultsBoxEl.appendChild(formEl);
+    var labelEl = document.createElement("label");
+    labelEl.setAttribute("for", "initials");
+    labelEl.innerText = "Enter initials: ";
+    formEl.appendChild(labelEl);
+    var inputEl = document.createElement("input");
+    inputEl.setAttribute("id", "initials");
+    inputEl.setAttribute("maxlength", "3");
+    formEl.appendChild(inputEl);
+    var submitBtnEl = document.createElement("button");
+    submitBtnEl.setAttribute("name", "Submit");
+    submitBtnEl.setAttribute("type", "Submit");
+    submitBtnEl.className = "btn submit-btn";
+    submitBtnEl.innerText = "Submit";
+    formEl.appendChild(submitBtnEl);
+
 }
 
 // randomizes the order of the questions in the array with Fisher-Yates algorithm
@@ -157,22 +191,6 @@ var removeQuestion = function() {
     var quizEl = document.querySelector(".quiz-box");
     quizEl.remove();
     questionCounter++;
-}
-
-// brings up the highscore screen
-var endQuiz = function(score) {
-    // creates a box for the other elements
-    console.log("IT'S OVER!");
-    var resultsBoxEl = document.createElement("section");
-    resultsBoxEl.className = "results-box";
-    quizAreaEl.appendChild(resultsBoxEl);
-    // shows the results
-    var doneEl = document.createElement("h1");
-    doneEl.innerText = "All done!";
-    resultsBoxEl.appendChild(doneEl);
-    var resultsEl = document.createElement("p");
-    resultsEl.innerText = "Your final score is " + score + ".";
-    resultsBoxEl.appendChild(resultsEl);
 }
 
 // checks if answer is correct

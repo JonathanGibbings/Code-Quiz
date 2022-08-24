@@ -114,6 +114,24 @@ main #intro-box p {
     margin: 20px;
     font-size: 18px;
 }
+
+.form-box {
+    margin: 20px;
+    display: flex;
+    justify-content: start;
+}
+
+.form-box label {
+    font-size: 18px;
+    margin: 30px 5px 0 0;
+}
+
+.form-box input {
+    width: 100px;
+    margin: 30px 5px 5px 5px;
+    height: fit-content;
+}
+
 /* end results styles*/
 
 /* start rankings styles */
