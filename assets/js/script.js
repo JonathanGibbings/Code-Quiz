@@ -1,7 +1,5 @@
-// TODO move question counter check from next question to answer check or make own function
-
 // time limit for quiz
-var countLength = 75;
+var countLength = 15;
 var startBtnEl = document.querySelector(".start-btn");
 var quizAreaEl = document.querySelector("#quiz-area");
 // index tracker for question array
@@ -101,6 +99,7 @@ var countdown = function() {
         timerEl.innerHTML = "Time: " + countLength;
         if (countLength < 1) {
             clearInterval(interval);
+            removeQuestion();
             endQuiz(countLength);
         }
         if (questionCounter >= questionsList.length) {
@@ -120,7 +119,7 @@ var startQuiz = function() {
     nextQuestion();
 }
 
-// randomizes the order of the questions in the array
+// randomizes the order of the questions in the array with Fisher-Yates algorithm
 var randomizeQuestions = function(array) {
     for (var i = array.length -1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i+1));
@@ -156,7 +155,18 @@ var removeQuestion = function() {
 
 // brings up the highscore screen
 var endQuiz = function(score) {
+    // creates a box for the other elements
     console.log("IT'S OVER!");
+    var resultsBoxEl = document.createElement("section");
+    resultsBoxEl.className = "results-box";
+    quizAreaEl.appendChild(resultsBoxEl);
+    // shows the results
+    var doneEl = document.createElement("h1");
+    doneEl.innerText = "All done!";
+    resultsBoxEl.appendChild(doneEl);
+    var resultsEl = document.createElement("p");
+    resultsEl.innerText = "Your final score is " + score + ".";
+    resultsBoxEl.appendChild(resultsEl);
 }
 
 // checks if answer is correct
@@ -183,9 +193,7 @@ var ansCheck = function(event) {
             if (targetEl.id === correct) {
                 evalEl.innerText = "Correct";
                 ansBoxEl.appendChild(evalEl);
-                console.log("correct");
             } else {
-                console.log("Wrong");
                 evalEl.innerText = "Wrong";
                 ansBoxEl.appendChild(evalEl);
             }

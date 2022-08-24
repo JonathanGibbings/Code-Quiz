@@ -81,6 +81,7 @@ main #intro-box p {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    position: relative;
 }
 
 .ans-box .btn {
@@ -88,8 +89,32 @@ main #intro-box p {
     text-align: left;
 }
 
-/* .ruler {} */
+.ruler {
+    position: absolute;
+    bottom: 34px;
+    width: 800px;
+}
 
-/* .evaluation {} */
-
+.evaluation {
+    margin: 5px auto;
+}
 /* end dynamic quiz styles */
+
+/* start results styles */
+.results-box {
+    padding: 80px 200px;
+}
+
+.results-box h1 {
+    margin: 20px;
+    font-size: 48px;
+}
+
+.results-box p {
+    margin: 20px;
+    font-size: 18px;
+}
+/* end results styles*/
+
+/* start rankings styles */
+/* end ranking styles */
