@@ -87,9 +87,13 @@ var questionsList = [
         answer: "ans2"
     }
 ]
+// var for score tracking
+var scores = []
 // elements for event listeners
-var startBtnEl = document.querySelector(".start-btn");
 var quizAreaEl = document.querySelector("#quiz-area");
+var headerEl = document.querySelector("#header");
+var bodyEl = document.querySelector("#body");
+
 
 // Runs countdown till end of quizLength set at top
 var countdown = function() {
@@ -97,6 +101,7 @@ var countdown = function() {
     timerEl.innerHTML = "Time: " + countLength;
     var interval = setInterval(decrement, 1000);
     function decrement() {
+        countLength--;
         timerEl.innerHTML = "Time: " + countLength;
         if (countLength < 1) {
             // stops timer
@@ -112,7 +117,7 @@ var countdown = function() {
             clearInterval(interval);
             endQuiz(countLength);
         }
-        countLength--;
+
     }
 }
 
@@ -148,6 +153,7 @@ var endQuiz = function(score) {
     formEl.appendChild(labelEl);
     var inputEl = document.createElement("input");
     inputEl.setAttribute("id", "initials");
+    inputEl.setAttribute("name", "initials");
     inputEl.setAttribute("maxlength", "3");
     formEl.appendChild(inputEl);
     var submitBtnEl = document.createElement("button");
@@ -156,7 +162,6 @@ var endQuiz = function(score) {
     submitBtnEl.className = "btn submit-btn";
     submitBtnEl.innerText = "Submit";
     formEl.appendChild(submitBtnEl);
-
 }
 
 // randomizes the order of the questions in the array with Fisher-Yates algorithm
@@ -194,38 +199,127 @@ var removeQuestion = function() {
 }
 
 // checks if answer is correct
-var ansCheck = function(event) {
-    // gets what answer was clicked
-    var targetEl = event.target;
-    // checks if target was an answer button
-    if (targetEl.matches(".ans-btn")) {
-        // finds correct answer from object
-        var correct = questionsList[questionCounter].answer
-        // removes current question and increments question count
-        removeQuestion();
-        if (questionCounter < questionsList.length) {
-            // brings next question up
-            nextQuestion();
-            // creates elements to show evaluation of answer
-            var ansBoxEl = document.querySelector(".ans-box");
-            var hRuleEl = document.createElement("hr");
-            hRuleEl.className = "ruler";
-            ansBoxEl.appendChild(hRuleEl);
-            var evalEl = document.createElement("h2");
-            evalEl.className = "evaluation";
-            // checks if answers match and shows evaluation
-            if (targetEl.id === correct) {
-                evalEl.innerText = "Correct";
-                ansBoxEl.appendChild(evalEl);
-            } else {
-                evalEl.innerText = "Wrong";
-                ansBoxEl.appendChild(evalEl);
-                countLength -= 10;
-            }
+var ansCheck = function(target) {
+    // gets what  was clicked
+    var targetEl = target;
+    // finds correct answer from object
+    var correct = questionsList[questionCounter].answer
+    // removes current question and increments question count
+    removeQuestion();
+    if (questionCounter < questionsList.length) {
+        // brings next question up
+        nextQuestion();
+        // creates elements to show evaluation of answer
+        var ansBoxEl = document.querySelector(".ans-box");
+        var hRuleEl = document.createElement("hr");
+        hRuleEl.className = "ruler";
+        ansBoxEl.appendChild(hRuleEl);
+        var evalEl = document.createElement("h2");
+        evalEl.className = "evaluation";
+        // checks if answers match and shows evaluation
+        if (targetEl.id === correct) {
+            evalEl.innerText = "Correct";
+            ansBoxEl.appendChild(evalEl);
+        } else {
+            evalEl.innerText = "Wrong";
+            ansBoxEl.appendChild(evalEl);
+            countLength -= 10;
         }
     }
 }
 
+// checks what was clicked
+var eventHandler = function(event) {
+    // gets what  was clicked
+    var targetEl = event.target;
+    // runs function based on what was clicked
+    if (targetEl.matches(".start-btn")) {
+        startQuiz();
+    } else if (targetEl.matches(".ans-btn")) {
+        ansCheck(targetEl);
+    } else if (targetEl.matches(".submit-btn")) {
+        event.preventDefault();
+        // initializes and fills object
+        var userScore = {
+            user: "",
+            score: 0
+        }
+        userScore.user = document.querySelector("input[name='initials']").value;
+        userScore.score = countLength;
+        // adds object to array
+        scores.push(userScore);
+        saveScore();
+        showScores();
+    }
+}
+
+// dynamically changes screen to show top scores
+var showScores = function() {
+    // clears screen
+    quizAreaEl.remove();
+    headerEl.remove();
+    // adds score elements
+    var scoreBoxEl = document.createElement("section");
+    scoreBoxEl.setAttribute("id", "score-box");
+    bodyEl.appendChild(scoreBoxEl);
+    var highScoreEl = document.createElement("h1");
+    highScoreEl.innerText = "High Scores";
+    scoreBoxEl.appendChild(highScoreEl);
+    var scoreListEl = document.createElement("ul");
+    scoreBoxEl.appendChild(scoreListEl);
+    for (var i = 0; i , i < scores.length; i++) {
+        var scoreItemEl = document.createElement("li");
+        scoreItemEl.innerText = (i+1) + ". " + scores[i].user + " - " + scores[i].score;
+        scoreBoxEl.appendChild(scoreItemEl);
+    }
+
+}
+
+// sets the screen to the home start screen for the quiz
+var introScreen = function() {
+    var introBoxEl = document.createElement("section");
+    introBoxEl.setAttribute("id", "intro-box");
+    quizAreaEl.appendChild(introBoxEl);
+    var introTitle = document.createElement("h1");
+    introTitle.innerText = "Coding Quiz Challenge";
+    introBoxEl.appendChild(introTitle);
+    var introInstruct = document.createElement("p");
+    introInstruct.innerText = "Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your score/time by ten seconds!";
+    introBoxEl.appendChild(introInstruct);
+    var startBtn = document.createElement("button");
+    startBtn.innerText = "Start Quiz";
+    startBtn.className = "btn start-btn";
+    introBoxEl.appendChild(startBtn);
+}
+
+// saves scores to local storage
+var saveScore = function() {
+    scores.sort(function(a, b) {
+        return a.score - b.score;
+    });
+    scores.reverse();
+    localStorage.setItem("scores", JSON.stringify(scores));
+}
+
+// loads scores from local storage
+var loadScores = function() {
+    var savedScores = localStorage.getItem("scores");
+    if (!savedScores) {
+        return false
+    }
+    savedScores = JSON.parse(savedScores);
+    for (i = 0; i < savedScores.length; i++) {
+        scores.push(savedScores[1]);
+    }
+}
+
+// deletes scores from storage
+var deleteScores = function() {
+    localStorage.removeItem("scores");
+}
+
+introScreen();
+loadScores();
 // event listeners for buttons
-startBtnEl.addEventListener("click", startQuiz);
-quizAreaEl.addEventListener("click", ansCheck);
+quizAreaEl.addEventListener("click", eventHandler);
+headerEl.addEventListener("click", showScores);

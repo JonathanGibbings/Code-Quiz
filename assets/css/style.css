@@ -132,6 +132,10 @@ main #intro-box p {
     height: fit-content;
 }
 
+.form-box .submit-btn {
+    font-size: 18px;
+    margin: 20px 5px;
+}
 /* end results styles*/
 
 /* start rankings styles */
