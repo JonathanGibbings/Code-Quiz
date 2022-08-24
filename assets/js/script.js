@@ -98,8 +98,14 @@ var countdown = function() {
     function decrement() {
         timerEl.innerHTML = "Time: " + countLength;
         if (countLength < 1) {
+            // stops timer
             clearInterval(interval);
+            // resets time to 0 if negative
+            countLength = 0;
+            timerEl.innerHTML = "Time: " + countLength;
+            
             removeQuestion();
+
             endQuiz(countLength);
         }
         if (questionCounter >= questionsList.length) {
@@ -196,6 +202,7 @@ var ansCheck = function(event) {
             } else {
                 evalEl.innerText = "Wrong";
                 ansBoxEl.appendChild(evalEl);
+                countLength -= 10;
             }
         }
     }
