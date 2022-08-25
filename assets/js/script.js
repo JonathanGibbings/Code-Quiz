@@ -88,7 +88,7 @@ var questionsList = [
     }
 ]
 // var for score tracking
-var scores = []
+var scores = [];
 // elements for event listeners
 var quizAreaEl = document.querySelector("#quiz-area");
 var headerEl = document.querySelector("#header");
@@ -103,7 +103,7 @@ var countdown = function() {
     function decrement() {
         countLength--;
         timerEl.innerHTML = "Time: " + countLength;
-        if (countLength < 1) {
+        if (countLength <= 0) {
             // stops timer
             clearInterval(interval);
             // resets time to 0 if negative
@@ -206,7 +206,7 @@ var ansCheck = function(target) {
     var correct = questionsList[questionCounter].answer
     // removes current question and increments question count
     removeQuestion();
-    if (questionCounter < questionsList.length) {
+    if (questionCounter < questionsList.length && countLength > 0) {
         // brings next question up
         nextQuestion();
         // creates elements to show evaluation of answer
@@ -241,10 +241,10 @@ var eventHandler = function(event) {
         event.preventDefault();
         // initializes and fills object
         var userScore = {
-            user: "",
+            player: "",
             score: 0
-        }
-        userScore.user = document.querySelector("input[name='initials']").value;
+        };
+        userScore.player = document.querySelector("input[name='initials']").value;
         userScore.score = countLength;
         // adds object to array
         scores.push(userScore);
@@ -273,7 +273,7 @@ var showScores = function() {
     scoreBoxEl.appendChild(scoreListEl);
     for (var i = 0; i , i < scores.length; i++) {
         var scoreItemEl = document.createElement("li");
-        scoreItemEl.innerText = (i+1) + ". " + scores[i].user + " - " + scores[i].score;
+        scoreItemEl.innerHTML = (i+1) + ". " + scores[i].player + " - " + scores[i].score;
         scoreListEl.appendChild(scoreItemEl);
     }
     // add buttons for return and delete
@@ -307,10 +307,10 @@ var introScreen = function() {
 // saves scores to local storage
 var saveScore = function() {
     scores.sort(function(a, b) {
-        return a.score - b.score;
+        return b.score - a.score;
     });
-    scores.reverse();
     localStorage.setItem("scores", JSON.stringify(scores));
+    // loadScores();
 }
 
 // loads scores from local storage
@@ -321,15 +321,16 @@ var loadScores = function() {
     }
     savedScores = JSON.parse(savedScores);
     for (i = 0; i < savedScores.length; i++) {
-        scores.push(savedScores[1]);
+        scores.push(savedScores[i]);
     }
 }
 
 // deletes scores from storage
 var deleteScores = function() {
     localStorage.removeItem("scores");
+    var scoreListEl = document.querySelector("ul")
+    scoreListEl.remove();
 }
-
 introScreen();
 loadScores();
 // event listeners for buttons
