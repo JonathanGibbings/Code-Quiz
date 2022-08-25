@@ -1,5 +1,5 @@
 // time limit for quiz
-var countLength = 15;
+var countLength = 75;
 // index tracker for questionList array
 var questionCounter = 0;
 var questionsList = [
